@@ -6,6 +6,7 @@ wiki:
   site_name: MediaWiki
   meta_namespace: MediaWiki
   base_url: http://www.example.com
+  domain: example
   logo:
     path: images/logo.jpg
     source_file: none

@@ -1,0 +1,8 @@
+RewriteEngine On
+
+# map /wiki to w/index.php
+RewriteRule ^/?wiki(/.*)?$ %{DOCUMENT_ROOT}/w/index.php [L]
+
+# prevent users from accessing the wiki if they're just scanning IP addresses
+RewriteCond %{HTTP_HOST}       !^.*{{ wiki.domain }}.* [NC]
+RewriteRule .* - [F]

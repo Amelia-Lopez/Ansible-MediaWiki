@@ -29,9 +29,9 @@
 - name: Moving MediaWiki to web directory
   command: creates={{ wiki.install_path }} mv /tmp/mediawiki-1.24.1/ {{ wiki.install_path }}
 
-- name: Setting up /wiki endpoint
-  file:
-    src: wiki.conf
+- name: Setting up /wiki endpoint and securing wiki from IP address scanning
+  template:
+    src: wiki.conf.j2
     dest: /etc/httpd/conf.d/wiki.conf
     owner: "{{ wiki.user }}"
     group: "{{ wiki.user }}"
