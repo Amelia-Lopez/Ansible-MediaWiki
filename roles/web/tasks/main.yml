@@ -3,16 +3,15 @@
   yum: name={{ item }} state=present
   with_items:
     - httpd
-    - mysql-server
+    - mariadb
     - php
     - php-pear
     - php-xml
     - php-mysql
     - php-intl
-    - php-peci-apc
     - php-gd
     - php-mbstring
-    - imageMagick-perl
+    - ImageMagick-perl
     - wget
 
 - name: Download MediaWiki
@@ -20,12 +19,31 @@
     url: http://releases.wikimedia.org/mediawiki/1.24/mediawiki-1.24.1.tar.gz
     dest: /tmp/mediawiki.tgz
 
+- name: Create MediaWiki directory
+  file:
+    path: "{{ wiki.install_path }}"
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0755
+
 - name: Unarchive MediaWiki
   unarchive:
     src: /tmp/mediawiki.tgz
-    dest: "{{ wiki.install_path }}"
+    dest: /tmp
     owner: "{{ wiki.user }}"
     group: "{{ wiki.user }}"
+
+- name: Create wiki directory
+  file:
+    path: "{{ wiki.install_path }}"
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0644
+  register: wiki_dir
+
+- name: Moving MediaWiki to web directory
+  command: mv /tmp/mediawiki-1.24.1/* {{ wiki.install_path }}
+  when: wiki_dir.changed
 
 - name: Copy custom image file for the logo image
   copy:
