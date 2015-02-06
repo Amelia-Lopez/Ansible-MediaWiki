@@ -1,0 +1,48 @@
+---
+# most of these variables should be passed in to ansible with --extra-vars "@your_file.json"
+wiki:
+  install_path: /opt/mediawiki
+  user: apache
+  site_name: MediaWiki
+  meta_namespace: MediaWiki
+  base_url: http://www.example.com
+  logo:
+    path: images/logo.jpg
+    source_file: none
+    copy_custom_file: false
+  emergency_contact: postmaster@example.com
+  password_sender: postmaster@example.com
+  secret_key: a1234567890
+  upgrade_key: a12345
+  cache:
+    type: CACHE_NONE
+    mem_cached_servers: array()
+  db:
+    type: mysql
+    server: mysql.example.com
+    name: wiki
+    user: dbuser
+    password: dbpassword
+    prefix: ""
+    table_options: "ENGINE=InnoDB, DEFAULT CHARSET=binary"
+  skins:
+    - CologneBlue/CologneBlue.php
+    - Modern/Modern.php
+    - MonoBook/MonoBook.php
+    - Vector/Vector.php
+  default_skin: vector
+  permissions:
+    groups:
+      - group: "*", permission: "createaccount", allowed: "false"
+  extensions:
+    - Cite/Cite.php
+    - Gadgets/Gadgets.php
+    - InputBox/InputBox.php
+    - Nuke/Nuke.php
+    - ParserFunctions/ParserFunctions.php
+    - Poem/Poem.php
+    - Renameuser/Renameuser.php
+    - SpamBlacklist/SpamBlacklist.php
+  custom_lines:
+    - "# speed improvements"
+    - $wgUseGzip = true;
