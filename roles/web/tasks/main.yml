@@ -29,6 +29,31 @@
 - name: Moving MediaWiki to web directory
   command: creates={{ wiki.install_path }} mv /tmp/mediawiki-1.24.1/ {{ wiki.install_path }}
 
+- name: Setting up /wiki endpoint
+  file:
+    src: wiki.conf
+    dest: /etc/httpd/conf.d/wiki.conf
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0664
+
+- name: Configuring MediaWiki
+  template:
+    src: LocalSettings.php.j2
+    dest: "{{ wiki.install_path }}/LocalSettings.php"
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0644
+
+- name: Copy custom image file for the logo image
+  copy:
+    src: "{{ wiki.logo.source_path }}"
+    dest: "{{ wiki.install_path }}/{{ wiki.logo.path }}"
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0644
+  when: wiki.logo.copy_custom_file
+
 - name: Updating permissions on MediaWiki installation parent directory
   file:
     path: "{{ wiki.install_path }}/.."
@@ -45,20 +70,3 @@
     owner: "{{ wiki.user }}"
     group: "{{ wiki.user }}"
     mode: 0775
-
-- name: Setting up /wiki alias
-  copy:
-    src: htaccess
-    dest: "{{ wiki.install_path }}/../.htaccess"
-    owner: "{{ wiki.user }}"
-    group: "{{ wiki.user }}"
-    mode: 0664
-
-- name: Copy custom image file for the logo image
-  copy:
-    src: "{{ wiki.logo.source_path }}"
-    dest: "{{ wiki.install_path }}/{{ wiki.logo.path }}"
-    owner: "{{ wiki.user }}"
-    group: "{{ wiki.user }}"
-    mode: 0644
-  when: wiki.logo.copy_custom_file
