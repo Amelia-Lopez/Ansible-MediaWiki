@@ -33,7 +33,7 @@ wiki:
   default_skin: vector
   permissions:
     groups:
-      - group: "*", permission: "createaccount", allowed: "false"
+      - { group: "*", permission: "createaccount", allowed: "false" }
   extensions:
     - Cite/Cite.php
     - Gadgets/Gadgets.php
