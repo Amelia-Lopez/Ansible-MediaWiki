@@ -1,7 +1,7 @@
 ---
 # most of these variables should be passed in to ansible with --extra-vars "@your_file.json"
 wiki:
-  install_path: /var/www/html
+  install_path: /var/www/html/w
   user: apache
   site_name: MediaWiki
   meta_namespace: MediaWiki

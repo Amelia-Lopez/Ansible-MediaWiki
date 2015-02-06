@@ -1,0 +1,11 @@
+# Disable directory listing
+Options -Indexes
+
+# wiki - remove index.php from path by redirecting
+RewriteEngine On
+RewriteRule ^/?wiki(/.*)?$ %{DOCUMENT_ROOT}/w/index.php [L] 
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>

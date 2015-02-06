@@ -19,13 +19,6 @@
     url: http://releases.wikimedia.org/mediawiki/1.24/mediawiki-1.24.1.tar.gz
     dest: /tmp/mediawiki.tgz
 
-- name: Create MediaWiki directory
-  file:
-    path: "{{ wiki.install_path }}"
-    owner: "{{ wiki.user }}"
-    group: "{{ wiki.user }}"
-    mode: 0755
-
 - name: Unarchive MediaWiki
   unarchive:
     src: /tmp/mediawiki.tgz
@@ -33,22 +26,38 @@
     owner: "{{ wiki.user }}"
     group: "{{ wiki.user }}"
 
-- name: Create wiki directory
+- name: Moving MediaWiki to web directory
+  command: creates={{ wiki.install_path }} mv /tmp/mediawiki-1.24.1/ {{ wiki.install_path }}
+
+- name: Updating permissions on MediaWiki installation parent directory
   file:
-    path: "{{ wiki.install_path }}"
+    path: "{{ wiki.install_path }}/.."
+    state: directory
     owner: "{{ wiki.user }}"
     group: "{{ wiki.user }}"
-    mode: 0644
-  register: wiki_dir
+    mode: 0775
 
-- name: Moving MediaWiki to web directory
-  command: mv /tmp/mediawiki-1.24.1/* {{ wiki.install_path }}
-  when: wiki_dir.changed
+- name: Updating permissions on MediaWiki installation
+  file:
+    path: "{{ wiki.install_path }}"
+    state: directory
+    recurse: yes
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0775
+
+- name: Setting up /wiki alias
+  copy:
+    src: htaccess
+    dest: "{{ wiki.install_path }}/../.htaccess"
+    owner: "{{ wiki.user }}"
+    group: "{{ wiki.user }}"
+    mode: 0664
 
 - name: Copy custom image file for the logo image
   copy:
     src: "{{ wiki.logo.source_path }}"
-    dest: "{{ wiki.install_path }}"
+    dest: "{{ wiki.install_path }}/{{ wiki.logo.path }}"
     owner: "{{ wiki.user }}"
     group: "{{ wiki.user }}"
     mode: 0644
