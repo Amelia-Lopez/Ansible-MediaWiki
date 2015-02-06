@@ -17,4 +17,4 @@ if [ ! -d "$DIRECTORY" ]; then
 fi
 
 # run ansible
-ansible-playbook -i aws site.yml --extra-vars "@~/wiki.json"
+ansible-playbook -i aws site.yml --extra-vars "$@"
