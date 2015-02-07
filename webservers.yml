@@ -2,4 +2,4 @@
 - hosts: webservers
   sudo: yes
   roles:
-    - web
+    - mediawiki
