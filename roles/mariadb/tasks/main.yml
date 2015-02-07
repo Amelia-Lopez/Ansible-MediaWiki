@@ -1,0 +1,6 @@
+---
+- name: Install dependencies
+  yum: name={{ item }} state=present
+  with_items:
+    - mariadb
+    - mariadb-server
